@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net"
-	"net/http"
 	"os"
 	"time"
 
@@ -61,20 +59,4 @@ func parseArgs(args []string) (Args, error) {
 		From:   args[2],
 		To:     args[3],
 	}, nil
-}
-
-func DefaultClient() *http.Client {
-	return &http.Client{
-		Timeout: 15 * time.Second,
-		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
-			DialContext: (&net.Dialer{
-				Timeout:   15 * time.Second,
-				KeepAlive: 15 * time.Second,
-			}).DialContext,
-			MaxIdleConns:          1,
-			MaxConnsPerHost:       1,
-			ResponseHeaderTimeout: 10 * time.Second,
-		},
-	}
 }
