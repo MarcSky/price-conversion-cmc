@@ -1,2 +1,3 @@
 # price-conversion-cmc
-Example of using CoinMarketCap API for price conversation utility
+
+Example of using api /v2/tools/price-conversation from CoinMarketCap API to convert one currency to another.
