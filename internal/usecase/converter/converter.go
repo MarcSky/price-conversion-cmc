@@ -2,7 +2,6 @@ package converter
 
 import (
 	"context"
-	"net"
 	"net/http"
 	"time"
 
@@ -17,17 +16,8 @@ type Usecase struct {
 
 func New(apiKey string) *Usecase {
 	conversionHTTPClient := &http.Client{
-		Timeout: 15 * time.Second,
-		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
-			DialContext: (&net.Dialer{
-				Timeout:   15 * time.Second,
-				KeepAlive: 15 * time.Second,
-			}).DialContext,
-			MaxIdleConns:          1,
-			MaxConnsPerHost:       1,
-			ResponseHeaderTimeout: 10 * time.Second,
-		},
+		Timeout:   15 * time.Second,
+		Transport: http.DefaultTransport,
 	}
 	return &Usecase{
 		conversionClient: cmc.NewService(conversionHTTPClient, apiKey),
