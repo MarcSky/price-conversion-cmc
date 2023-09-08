@@ -2,10 +2,6 @@ package converter
 
 import (
 	"context"
-	"net/http"
-	"time"
-
-	"cryptoconverter/internal/service/cmc"
 
 	"github.com/shopspring/decimal"
 )
@@ -14,13 +10,9 @@ type Usecase struct {
 	conversionClient ConversionClient
 }
 
-func New(apiKey string) *Usecase {
-	conversionHTTPClient := &http.Client{
-		Timeout:   15 * time.Second,
-		Transport: http.DefaultTransport,
-	}
+func New(conversionClient ConversionClient) *Usecase {
 	return &Usecase{
-		conversionClient: cmc.NewService(conversionHTTPClient, apiKey),
+		conversionClient: conversionClient,
 	}
 }
 

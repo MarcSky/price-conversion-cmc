@@ -15,10 +15,6 @@ const (
 	baseURL = "https://pro-api.coinmarketcap.com"
 )
 
-type httpClient interface {
-	Do(req *http.Request) (*http.Response, error)
-}
-
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 type Service struct {
@@ -26,27 +22,11 @@ type Service struct {
 	client httpClient
 }
 
-type Result struct {
-	Status struct {
-		ErrorCode    int    `json:"error_code"`
-		ErrorMessage string `json:"error_message,omitempty"`
-	}
-	Data []struct {
-		Quote map[string]struct {
-			Price float64 `json:"price"`
-		} `json:"quote"`
-	} `json:"data"`
-}
-
 func NewService(client httpClient, apiKey string) *Service {
 	return &Service{
 		apiKey: apiKey,
 		client: client,
 	}
-}
-
-func (c *Service) Run() {
-
 }
 
 func (c *Service) Conversion(ctx context.Context, from, to string, amount decimal.Decimal) (decimal.Decimal, error) {

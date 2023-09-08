@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"cryptoconverter/internal/service/cmc"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -26,7 +28,13 @@ func main() {
 		errExit(err)
 	}
 
-	converterUs := converter.New(os.Getenv("CMC_API_KEY"))
+	conversionHTTPClient := &http.Client{
+		Timeout:   15 * time.Second,
+		Transport: http.DefaultTransport,
+	}
+
+	cmcSvc := cmc.NewService(conversionHTTPClient, os.Getenv("CMC_API_KEY"))
+	converterUs := converter.New(cmcSvc)
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 	result, err := converterUs.Conversion(ctx, args.From, args.To, args.Amount)
